@@ -1,20 +1,21 @@
-import React, {FC, useEffect, useState} from 'react';
-import { Modal, StyleSheet, Text, TextInput,  Pressable, View} from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { Modal, StyleSheet, Text, TextInput, Pressable, View } from 'react-native';
 import { useAppContext } from '../contexts/AppContext';
 import ColorSelect from './ColorSelect';
 import { isLandscape } from '../services/utils'
+import { ColorPalette } from '../assets/constansts';
 
 interface PopUpProps {
   modalVisible: boolean
   closeModal: () => void
 }
 
-const PopUp: FC<PopUpProps> = ({modalVisible, closeModal}) => {
+const PopUp: FC<PopUpProps> = ({ modalVisible, closeModal }) => {
   const { data, updateData, selectedItem } = useAppContext();
   const [text, onChangeText] = useState(data[selectedItem]?.title || '');
-  const [tempColor, setTempColor] = useState(data[selectedItem]?.color|| '');
+  const [tempColor, setTempColor] = useState(data[selectedItem]?.color || '');
   const [colorModal, setColorModal] = useState(false);
-  
+
   // Accept changes
   const onAccept = () => {
     data[selectedItem].title = text;
@@ -27,7 +28,7 @@ const PopUp: FC<PopUpProps> = ({modalVisible, closeModal}) => {
   }
 
   // set input text before open modal
-  useEffect(() => { 
+  useEffect(() => {
     onChangeText(data[selectedItem]?.title || '')
   }, [selectedItem])
 
@@ -38,51 +39,51 @@ const PopUp: FC<PopUpProps> = ({modalVisible, closeModal}) => {
         transparent
         visible={modalVisible}
         onRequestClose={closeModal}>
-            <View style={[styles.modalView, isLandscape()? styles.row:{}]}>
-              <View style={styles.colorContainer}>
-              <Text style={styles.modalText}>Select New Color:</Text>
+        <View style={[styles.modalView, isLandscape() ? styles.row : {}]}>
+          <View style={styles.colorContainer}>
+            <Text style={styles.modalText}>Select New Color:</Text>
             {colorModal && <View style={styles.colorPicker}>
-              <ColorSelect 
+              <ColorSelect
                 onComplite={OnAcceptColor}
-                color={tempColor || ''} 
-                />
-              </View>}
+                color={tempColor || ''}
+              />
+            </View>}
             <View style={styles.row}>
-            <View style={[styles.colorCircle, {backgroundColor: tempColor}]} />
+              <View style={[styles.colorCircle, { backgroundColor: tempColor }]} />
 
-            <Pressable
-              style={[styles.button, styles.buttonNormal]}
-              onPress={()=>setColorModal(!colorModal)}>
-              <Text style={styles.textStyle}>{colorModal? 'Close' : 'Open'} Color Select</Text>
-            </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonNormal]}
+                onPress={() => setColorModal(!colorModal)}>
+                <Text style={styles.textStyle}>{colorModal ? 'Close' : 'Open'} Color Select</Text>
+              </Pressable>
 
-              </View>
-            
-              </View>
-              <View style={styles.titleContainer}>
+            </View>
+
+          </View>
+          <View style={styles.titleContainer}>
             <Text style={styles.modalText}>Choose New Title:</Text>
             <TextInput
               style={styles.input}
               onChangeText={onChangeText}
               value={text}
-             />
-           
+            />
+
             <View style={styles.row}>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={closeModal}>
-              <Text style={styles.textStyle}>Cancel</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.button, styles.buttonNormal]}
-              onPress={onAccept}>
-              <Text style={styles.textStyle}>Apply Changes</Text>
-            </Pressable>
-            </View>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={closeModal}>
+                <Text style={styles.textStyle}>Cancel</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonNormal]}
+                onPress={onAccept}>
+                <Text style={styles.textStyle}>Apply Changes</Text>
+              </Pressable>
             </View>
           </View>
+        </View>
       </Modal>
-   </View>
+    </View>
   );
 };
 
@@ -143,14 +144,11 @@ const styles = StyleSheet.create({
     elevation: 2,
     margin: 2
   },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
   buttonClose: {
-    backgroundColor: '#eb1f1f',
+    backgroundColor: ColorPalette.padRed,
   },
   buttonNormal: {
-    backgroundColor: '#272ee7',
+    backgroundColor: ColorPalette.padBlue,
   },
   textStyle: {
     color: 'white',
